@@ -1,0 +1,3 @@
+[submodule "core-services"]
+	path = core-services
+	url = http://github.com/armand1m/core-services.git

@@ -1,0 +1,26 @@
+version: '2'
+services:
+  service:
+    build: ./service
+    env_file: ./properties.env
+    restart: always
+    ports:
+      - 80
+    volumes:
+      - ./service:/src/service
+    depends_on:
+      - consul
+    links:
+      - consul
+
+  consul:
+    extends:
+      file: ./core-services/services.yml
+      service: consul_service
+
+  gateway:
+    extends:
+      file: ./core-services/services.yml
+      service: fabio_service
+    links:
+      - consul
