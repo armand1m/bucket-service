@@ -3,10 +3,11 @@ services:
   service:
     build: ./service
     env_file: ./properties.env
-    restart: always
+    restart: unless-stopped 
     ports:
       - 80
     volumes:
+      - ./data:/data
       - ./service:/src/service
     depends_on:
       - consul
