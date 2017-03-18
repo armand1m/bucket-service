@@ -1,23 +1,31 @@
-# Microservice Barebone
+# Bucket Microserivce
 
-This is a microservice project barebone project for the `armand1m/microservices` environment.
+![Build Status](https://github.com/armand1m/bucket-service/blob/master/.github/bucket-icon.png)
 
-This project **does not** contains any code implementation for a service. 
-This is only the barebone project to kickstart a service that compatible with the `armand1m/microservices` environment.
+This is a microservice project for the `armand1m/microservices` environment.
 
-It includes a simple `docker-compose.yml` defining this service, and extending the services from `armand1m/core-services`, 
-it also includes a `properties.env` file that contains some environment variables. 
+This project is a bucket service implemented in Node.
 
-You can edit these files in order to parametrize your service as needed.
+It allows you to serve and upload static files.
 
-Make your implementation inside the `./service` folder.
+It exposes the following routes:
+
+ - `GET /bucket/raw`: Search through the static files.
+ - `POST /bucket`: Accepts a multipart request for uploading static files.
+
+It includes a simple `docker-compose.yml` defining this service, and extending the services from `armand1m/core-services`.
+
+It also includes a `properties.env` file that contains some environment variables. You can set the path to serve at the environment variable `BUCKET_PATH`, specified in this file, for example.
+
+You can edit these files in order to parametrize this service to match your needs.
+
+The implementation can be found inside the `./service` folder.
 
 ## Running
-    $ sudo docker-compose up -d
+    $ ./commands/run
 
 ## Testing
-
-_(soon)_
+    $ ./commands/test
 
 ## Logging
-    $ sudo docker-compose logs
+    $ ./commands/log
