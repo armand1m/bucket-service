@@ -9,5 +9,5 @@ WORKDIR /service
 
 EXPOSE 80
 
-ENTRYPOINT ["npm"]
-CMD ["start"]
+ENTRYPOINT ["node"]
+CMD ["--harmony-async-await", "index.js"]
