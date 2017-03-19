@@ -1,3 +1,4 @@
-const Server = require('./lib/server')
+const MicroserviceWrapper = require('microservice-wrapper')
+const service = require('./service')
 
-new Server().start()
+new MicroserviceWrapper(service).start()
