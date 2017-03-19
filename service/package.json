@@ -9,10 +9,8 @@
   },
   "dependencies": {
     "busboy": "^0.2.14",
-    "consul": "^0.28.0",
     "express": "^4.15.2",
-    "ip": "^1.1.5",
-    "microservice-events": "^1.0.0",
-    "microservice-info": "1.0.2"
+    "microservice-info": "1.0.2",
+    "microservice-wrapper": "^1.0.0"
   }
 }

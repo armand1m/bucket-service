@@ -177,11 +177,19 @@ microservice-events@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/microservice-events/-/microservice-events-1.0.0.tgz#d68864da5935106361f834eaf231928587e2a351"
 
-microservice-info@1.0.2:
+microservice-info@1.0.2, microservice-info@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/microservice-info/-/microservice-info-1.0.2.tgz#4e180f7a0092db3ae2027694c15e3ea80e22f71e"
   dependencies:
     ip "^1.1.5"
+
+microservice-wrapper@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/microservice-wrapper/-/microservice-wrapper-1.0.0.tgz#888e4ecbbbfabc26e03604493b5ed58f8a5cc176"
+  dependencies:
+    consul "^0.28.0"
+    microservice-events "^1.0.0"
+    microservice-info "^1.0.2"
 
 mime-db@~1.26.0:
   version "1.26.0"
