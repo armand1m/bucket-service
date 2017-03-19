@@ -1,4 +1,4 @@
-const Info = require('./info')
+const Info = require('microservice-info')
 const Events = require('./events')
 const Service = require('./service')
 const ConsulAgentService = require('./consul').agent.service
