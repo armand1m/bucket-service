@@ -33,4 +33,23 @@ app.post(`/${Info.name}/:path`, (req, res) => {
   })
 })
 
-module.exports = app
+module.exports = {
+  start(port) {
+    return new Promise((resolve, reject) => {
+      let instance = app.listen(port, err => {
+        if (err) {
+          return reject(err)
+        }
+
+        console.log(`Server running in ${Info.uri}`)
+
+        return resolve(instance)
+      })
+    })
+  },
+  stop(instance) {
+    return new Promise((resolve, reject) => {
+      instance.close(() => { resolve() })
+    })
+  }
+}
