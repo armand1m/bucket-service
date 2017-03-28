@@ -1,39 +1,39 @@
-const Busboy = require('busboy')
 const express = require('express')
 const path = require('path')
-const app = express()
+const multer  = require('multer')
+const serveStatic = require('serve-static')
+const serveIndex = require('serve-index')
+const morgan = require('morgan')
+const errorHandler = require('api-error-handler')
+const info = require('microservice-info')
 
-const Info = require('microservice-info')
+const { BUCKET_PATH } = process.env
 
-const BUCKET_PATH = process.env.BUCKET_PATH
+const _mapFile = file => {
+  file.insertedBy = info.host
+  file.url = `${info.uri}/${info.name}/${file.filename}`
 
-app.get(`/${Info.name}/health`, (req, res) => {
-  res.send('{ "status": "health" }')
-})
+  return file
+}
 
-app.use(`/${Info.name}/raw`, express.static(BUCKET_PATH))
+const _url = route => `/${info.name}${route}`
 
-app.post(`/${Info.name}/:path`, (req, res) => {
-  let { headers } = req
+const api = express()
+const upload = multer({ dest: BUCKET_PATH })
 
-  let busboy = new Busboy({ headers })
+api.use(errorHandler())
 
-  busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
-    let saveTo = path.join(BUCKET_PATH, path.basename(fieldname))
+api.use(morgan('combined'))
 
-    console.log(`Saving ${filename} into ${saveTo}.`)
+api.use(_url('/_static'), serveStatic(BUCKET_PATH))
 
-    file.pipe(fs.createWriteStream(saveTo))
-  })
+api.use(_url('/_static'), serveIndex(BUCKET_PATH, { icons: true }))
 
-  busboy.on('finish', function() {
-    console.log(`Saved ${filename} into ${saveTo}.`)
-    res.append('Connection', 'close')
-    res.status(200).end()
-  })
-})
+api.post(_url('/'), upload.any(), (req, res) => res.json(req.files.map(_mapFile)))
+
+api.get(_url('/health'), (req, res) => res.json({ status: "healthy" }))
 
 module.exports = {
-  start: async (port) => await app.listen(port),
+  start: async (port) => await api.listen(port),
   stop: async (instance) => await instance.close()
 }
