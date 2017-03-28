@@ -5,33 +5,34 @@ const serveStatic = require('serve-static')
 const serveIndex = require('serve-index')
 const morgan = require('morgan')
 const errorHandler = require('api-error-handler')
-const info = require('microservice-info')
 
-const { BUCKET_PATH } = process.env
+const {
+  bucketPath,
+  multerConfig,
+  serveIndexConfig
+} = require('./configuration')
 
-const _mapFile = file => {
-  file.insertedBy = info.host
-  file.url = `${info.uri}/${info.name}/${file.filename}`
-
-  return file
-}
-
-const _url = route => `/${info.name}${route}`
+const {
+  _url,
+  sendHealthStatus,
+  sendReceivedFilesInfo
+} = require('./functions')
 
 const api = express()
-const upload = multer({ dest: BUCKET_PATH })
+
+const upload = multer(multerConfig)
 
 api.use(errorHandler())
 
 api.use(morgan('combined'))
 
-api.use(_url('/_static'), serveStatic(BUCKET_PATH))
+api.use(_url('/_static'), serveStatic(bucketPath))
 
-api.use(_url('/_static'), serveIndex(BUCKET_PATH, { icons: true }))
+api.use(_url('/_static'), serveIndex(bucketPath, serveIndexConfig))
 
-api.post(_url('/'), upload.any(), (req, res) => res.json(req.files.map(_mapFile)))
+api.get(_url('/health'), sendHealthStatus)
 
-api.get(_url('/health'), (req, res) => res.json({ status: "healthy" }))
+api.post(_url('/'), upload.any(), sendReceivedFilesInfo)
 
 module.exports = {
   start: async (port) => await api.listen(port),

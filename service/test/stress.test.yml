@@ -1,0 +1,17 @@
+config:
+  target: "http://localhost:9999/bucket"
+  phases:
+    - duration: 60
+      arrivalRate: 20
+  files:
+    - "@./test.txt"
+
+scenarios:
+  -
+    name: "Upload simple file"
+    flow:
+      -
+        post:
+          url: "/"
+          formData:
+            file: "@./test.txt"
